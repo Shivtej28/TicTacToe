@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="interstitialAdId">454787735580421_458422231883638</string>
+    <string name="bannerAdId">454787735580421_458479588544569</string>
+
+    <string name="testInterstitialId">IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID</string>
+    <string name="testBannerId">IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID</string>
 </resources>
