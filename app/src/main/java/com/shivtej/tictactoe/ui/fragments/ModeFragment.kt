@@ -29,7 +29,7 @@ class ModeFragment : Fragment(R.layout.fragment_mode) {
         AudienceNetworkAds.initialize(context)
         adView = AdView(
             context,
-            "454787735580421_458479588544569",
+            "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID",
             AdSize.BANNER_HEIGHT_50
         )
 
@@ -39,7 +39,7 @@ class ModeFragment : Fragment(R.layout.fragment_mode) {
 
         interstitialAd = InterstitialAd(
             context,
-            "454787735580421_458422231883638"
+            "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID"
         )
 
         val interstitialAdListener = object : InterstitialAdListener {
@@ -74,7 +74,7 @@ class ModeFragment : Fragment(R.layout.fragment_mode) {
                 .withAdListener(interstitialAdListener)
                 .build()
         )
-        interstitialAd2 = InterstitialAd(context, "454787735580421_458422231883638")
+        interstitialAd2 = InterstitialAd(context, "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID")
 
         val interstitialAdListener2 = object : InterstitialAdListener {
             override fun onInterstitialDisplayed(ad: Ad) {

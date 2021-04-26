@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
+import com.facebook.ads.*
 import com.shivtej.tictactoe.R
 import com.shivtej.tictactoe.databinding.FragmentPlayerVsPlayerGridBinding
 
@@ -27,14 +29,56 @@ class PlayerVsPlayerGridFragment : Fragment(R.layout.fragment_player_vs_player_g
         intArrayOf(2, 4, 6)
     )
     private var counter = 0
-    lateinit var player1: String
-    lateinit var player2: String
+    private lateinit var player1: String
+    private lateinit var player2: String
     private var p1count: Int = 0
-    var p2count: Int = 0
+    private var p2count: Int = 0
+
+    private var count = 0
+    private lateinit var interstitialAd: InterstitialAd
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentPlayerVsPlayerGridBinding.bind(view)
+
+        AudienceNetworkAds.initialize(context)
+        interstitialAd = InterstitialAd(
+            context,
+            "IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID"
+        )
+        val interstitialAdListener = object : InterstitialAdListener {
+            override fun onInterstitialDisplayed(ad: Ad) {
+                // Interstitial ad displayed callback
+            }
+
+            override fun onInterstitialDismissed(ad: Ad) {
+                // Interstitial dismissed callback
+                resetGame()
+            }
+
+            override fun onError(ad: Ad, adError: AdError) {
+                // Ad error callback
+            }
+
+            override fun onAdLoaded(ad: Ad) {
+                // Interstitial ad is loaded and ready to be displayed
+                // Show the ad
+            }
+
+            override fun onAdClicked(ad: Ad) {
+                // Ad clicked callback
+            }
+
+            override fun onLoggingImpression(ad: Ad) {
+                // Ad impression logged callback
+            }
+        }
+        interstitialAd.loadAd(
+            interstitialAd.buildLoadAdConfig()
+                .withAdListener(interstitialAdListener)
+                .build()
+        )
 
         val bundle = arguments
         player1 = bundle?.getString("playe1").toString()
@@ -77,11 +121,21 @@ class PlayerVsPlayerGridFragment : Fragment(R.layout.fragment_player_vs_player_g
         }
 
         binding.btnReset.setOnClickListener {
-            resetGame()
+            count++
+            if (count == 2) {
+                if (interstitialAd.isAdLoaded) {
+                    interstitialAd.show()
+                } else {
+                    resetGame()
+                }
+            } else {
+                resetGame()
+            }
+
         }
     }
 
-    fun playerTap(view: View) {
+    private fun playerTap(view: View) {
         val img: ImageView = view as ImageView
         val tappedImage: Int = img.tag.toString().toInt()
 
@@ -120,7 +174,7 @@ class PlayerVsPlayerGridFragment : Fragment(R.layout.fragment_player_vs_player_g
                     p1count++
                     binding.tvPlayer1Score.text = p1count.toString()
                 } else {
-                    winner = "${player2} has won"
+                    winner = "$player2 has won"
                     p2count++
                     binding.tvPlayer2Score.text = p2count.toString()
                 }
